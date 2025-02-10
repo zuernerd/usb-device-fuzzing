@@ -38,12 +38,6 @@ while dev is not None:
             r = struct.unpack("I", os.urandom(4))[0]
             print("\nSending command %u with random value %x" % (dev.cur_tag() + 1, r))
 
-            # Print debug information for opcode and other fields
-            print(f"Current opcode value: {opcode}")
-            if opcode > 255:
-                print("Error: opcode value exceeds valid range (0-255). Adjusting to valid range.")
-                opcode = opcode % 256  # Adjust to valid range
-
             cmd = MSCCBW(ReqTag=dev.next_tag(), ExpectedDataSize=r)/SCSICmd(OperationCode=opcode)/Raw(os.urandom(r % 20))
             print(dev.hex_dump(bytes(cmd)))
 
